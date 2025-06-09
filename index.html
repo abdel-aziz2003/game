@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>688 Attack Sub - Play Online</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            text-shadow: 0 0 10px #ff6b6b;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            color: #4ecdc4;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            text-shadow: 0 0 5px #4ecdc4;
+        }
+        
+        .game-container {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        }
+        
+        #game {
+            width: 100%;
+            max-width: 720px;
+            height: 480px;
+            border: 2px solid #4ecdc4;
+            border-radius: 5px;
+            margin: 0 auto;
+            background: #000;
+            box-shadow: 0 0 15px rgba(78, 205, 196, 0.5);
+        }
+        
+        .instructions {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .instructions h3 {
+            color: #ffd93d;
+            margin-top: 0;
+            text-align: center;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .control-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        .warning {
+            background: rgba(255, 107, 107, 0.2);
+            border: 1px solid #ff6b6b;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 0.9em;
+        }
+        
+        .loading {
+            color: #4ecdc4;
+            font-size: 1.1em;
+            margin: 20px 0;
+        }
+        
+        .start-button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+            margin: 20px;
+        }
+        
+        .start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+        }
+        
+        .start-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .splash-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 720px;
+            height: 480px;
+            border: 2px solid #4ecdc4;
+            border-radius: 5px;
+            margin: 0 auto;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-title {
+            font-size: 3em;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-shadow: 0 0 20px #ff6b6b;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        
+        .developer-credit {
+            font-size: 1.2em;
+            color: #4ecdc4;
+            text-shadow: 0 0 10px #4ecdc4;
+            margin-bottom: 30px;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #ff6b6b; }
+            to { text-shadow: 0 0 30px #ff6b6b, 0 0 40px #ff6b6b; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .floating-element:nth-child(1) {
+            top: 10px;
+            left: 10px;
+            width: 20px;
+            height: 20px;
+            background: #ff6b6b;
+            animation-delay: 0s;
+        }
+        
+        .floating-element:nth-child(2) {
+            bottom: 20px;
+            right: 20px;
+            width: 15px;
+            height: 15px;
+            background: #4ecdc4;
+            animation-delay: -1s;
+        }
+        
+        .floating-element:nth-child(3) {
+            top: 50px;
+            right: 30px;
+            width: 10px;
+            height: 10px;
+            background: #ffd93d;
+            animation-delay: -2s;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            #game, .splash-screen {
+                height: 360px;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚢 688 Attack Sub 🚢</h1>
+        <div class="subtitle">Sega Genesis/Mega Drive Classic Submarine Simulation</div>
+        
+        <div class="warning">
+            <strong>⚠️ Legal Notice:</strong> Ensure you own a legal copy of this game. Place your ROM file in a "roms" folder and name it "688AttackSub.md" (or update the path below accordingly). This emulator is for educational and preservation purposes.
+        </div>
+        
+        <div class="game-container">
+            <div class="loading" id="loading-text" style="display: none;">🎮 Loading 688 Attack Sub... Please wait...</div>
+            
+            <div id="start-screen" class="splash-screen">
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+                <div class="floating-element"></div>
+                
+                <div class="game-title">688 Attack Sub</div>
+                <div class="developer-credit">Ayman M9awd Presents</div>
+                <button id="start-game-btn" class="start-button">
+                    🚀 Launch Submarine 🚀
+                </button>
+                <p style="color: #888; margin-top: 20px; font-size: 0.9em;">
+                    Click to load the emulator and begin your underwater mission
+                </p>
+            </div>
+            
+            <div id="game" style="display: none;"></div>
+        </div>
+        
+        <div class="instructions">
+            <h3>🎮 Submarine Controls</h3>
+            <div class="controls">
+                <div class="control-item"><strong>Arrow Keys:</strong> Navigate/D-Pad</div>
+                <div class="control-item"><strong>Z:</strong> A Button (Fire)</div>
+                <div class="control-item"><strong>X:</strong> B Button (Secondary)</div>
+                <div class="control-item"><strong>A:</strong> C Button (Options)</div>
+                <div class="control-item"><strong>Enter:</strong> Start/Pause</div>
+                <div class="control-item"><strong>Shift:</strong> Select</div>
+                <div class="control-item"><strong>Double-click:</strong> Fullscreen</div>
+                <div class="control-item"><strong>F11:</strong> Browser Fullscreen</div>
+            </div>
+            
+            <p style="margin-top: 15px; text-align: center;">
+                <strong>💾 Auto-Save:</strong> Your progress is automatically saved in your browser!<br>
+                <strong>🎮 Gamepad Support:</strong> Connect a USB/Bluetooth controller for the authentic experience!<br>
+                <strong>🚢 Mission:</strong> Command your nuclear submarine through dangerous underwater missions!
+            </p>
+        </div>
+        
+        <div class="instructions">
+            <h3>📁 Setup Instructions</h3>
+            <ol style="text-align: left;">
+                <li>Create a folder called "roms" in the same directory as this HTML file</li>
+                <li>Place your 688 Attack Sub ROM file in the roms folder</li>
+                <li><strong>Name it "688AttackSub.md"</strong> (note the .md extension)</li>
+                <li>If you use a different filename, update the <code>EJS_gameUrl</code> in the script below</li>
+                <li>Serve this page through a local server (not file://) for proper loading</li>
+            </ol>
+            <p><strong>Local Server:</strong> Use <code>python -m http.server</code> or <code>npx serve</code></p>
+            <p><strong>File Structure:</strong></p>
+            <pre style="background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; text-align: left;">
+/your-game-site/
+├── 688-attack-sub.html
+└── roms/
+    └── 688AttackSub.md
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        // EmulatorJS Configuration for 688 Attack Sub (Sega Genesis)
+        let gameStarted = false;
+        
+        function startGame() {
+            if (gameStarted) return;
+            gameStarted = true;
+            
+            const startScreen = document.getElementById('start-screen');
+            const gameDiv = document.getElementById('game');
+            const loadingText = document.getElementById('loading-text');
+            const startBtn = document.getElementById('start-game-btn');
+            
+            // Disable start button
+            startBtn.disabled = true;
+            startBtn.textContent = '🔄 Loading...';
+            
+            // Hide start screen and show loading
+            startScreen.style.display = 'none';
+            loadingText.style.display = 'block';
+            gameDiv.style.display = 'block';
+            
+            // Configure EmulatorJS for Sega Genesis/Mega Drive
+            window.EJS_player = '#game';
+            window.EJS_core = 'segaMD';
+            window.EJS_gameUrl = 'roms/688AttackSub.md'; // Updated to match your ROM file
+            window.EJS_gameName = '688AttackSub'; // Fixed game name
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+            window.EJS_startOnLoaded = true;
+            window.EJS_fullscreenOnLoaded = false;
+            window.EJS_loadStateOnStart = false;
+            window.EJS_color = '#ff6b6b';
+            
+            // Load EmulatorJS
+            const script = document.createElement('script');
+            script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+            script.onload = function() {
+                console.log('EmulatorJS loaded successfully');
+                setTimeout(() => {
+                    loadingText.style.opacity = '0.7';
+                    loadingText.innerHTML = '🚢 Submarine ready! Use controls below to navigate.';
+                }, 3000);
+            };
+            script.onerror = function() {
+                console.error('Failed to load EmulatorJS');
+                loadingText.innerHTML = '❌ Failed to load emulator. Check console for errors.';
+                loadingText.style.color = '#ff6b6b';
+            };
+            
+            document.body.appendChild(script);
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const startBtn = document.getElementById('start-game-btn');
+            if (startBtn) {
+                startBtn.addEventListener('click', startGame);
+            }
+        });
+        
+        // Error handling for ROM loading
+        window.addEventListener('error', function(e) {
+            if (e.filename && e.filename.includes('688AttackSub')) {
+                console.error('ROM loading error:', e);
+                const loadingText = document.getElementById('loading-text');
+                if (loadingText) {
+                    loadingText.innerHTML = '❌ ROM file not found. Please check that "688AttackSub.md" is in the roms/ folder.';
+                    loadingText.style.color = '#ff6b6b';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
